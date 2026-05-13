@@ -5,11 +5,15 @@ const state = {
   currentUnit: "fahrenheit",
   windUnit: "mph",
   precipitationUnit: "inch",
+  recentCities: loadRecentCities(),
+  activeCityKey: "",
 };
 
 const elements = {
   form: document.querySelector("#search-form"),
   input: document.querySelector("#city-input"),
+  addLocationButton: document.querySelector("#add-location-button"),
+  recentList: document.querySelector("#recent-list"),
   status: document.querySelector("#status-message"),
   cityName: document.querySelector("#city-name"),
   dateline: document.querySelector("#dateline"),
@@ -62,6 +66,19 @@ elements.form.addEventListener("submit", (event) => {
   }
 });
 
+elements.addLocationButton.addEventListener("click", () => {
+  elements.input.focus();
+});
+
+elements.recentList.addEventListener("click", (event) => {
+  const cityButton = event.target.closest("[data-city]");
+
+  if (cityButton) {
+    loadWeatherForCity(cityButton.dataset.city);
+  }
+});
+
+renderRecentCities();
 loadWeatherForCity("Chicago");
 
 async function loadWeatherForCity(city) {
@@ -163,7 +180,15 @@ function renderWeather(location, forecast) {
   const current = forecast.current;
   const units = forecast.current_units;
   const condition = describeWeather(current.weather_code);
+  const city = {
+    key: getLocationKey(location),
+    name: location.name,
+    region: formatRegion(location),
+    temperature: `${round(current.temperature_2m)}${units.temperature_2m}`,
+    icon: chooseDayNightIcon(condition.icon, current.is_day),
+  };
 
+  state.activeCityKey = city.key;
   elements.cityName.textContent = place;
   elements.dateline.textContent = formatDateline(current.time, forecast.timezone);
   elements.currentTemp.textContent = `${round(current.temperature_2m)}${units.temperature_2m}`;
@@ -174,6 +199,45 @@ function renderWeather(location, forecast) {
   renderMetrics(forecast);
   renderHourly(forecast);
   renderDaily(forecast);
+  rememberCity(city);
+}
+
+function rememberCity(city) {
+  const matchingIndex = state.recentCities.findIndex((item) => item.key === city.key);
+  const nextCities = state.recentCities.filter((_, index) => index !== matchingIndex);
+
+  state.recentCities = [city, ...nextCities].slice(0, 6);
+  saveRecentCities();
+  renderRecentCities();
+}
+
+function renderRecentCities() {
+  if (!state.recentCities.length) {
+    elements.recentList.innerHTML = `
+      <p class="empty-recents">Search for a city to add it here.</p>
+    `;
+    return;
+  }
+
+  elements.recentList.innerHTML = state.recentCities
+    .map(
+      (city) => `
+        <button
+          class="recent-city ${city.key === state.activeCityKey ? "is-active" : ""}"
+          type="button"
+          data-city="${escapeAttribute(city.name)}"
+        >
+          <span class="recent-pin" aria-hidden="true">⌖</span>
+          <span class="recent-copy">
+            <span class="recent-name">${escapeHtml(city.name)}</span>
+            <span class="recent-region">${escapeHtml(city.region)}</span>
+          </span>
+          <span class="recent-temp">${escapeHtml(city.temperature)}</span>
+          <span class="recent-icon" aria-hidden="true">${escapeHtml(city.icon)}</span>
+        </button>
+      `,
+    )
+    .join("");
 }
 
 function renderMetrics(forecast) {
@@ -273,6 +337,14 @@ function formatPlace(location) {
   return region ? `${location.name}` : location.name;
 }
 
+function formatRegion(location) {
+  return [location.admin1, location.country_code].filter(Boolean).join(", ") || location.country || "";
+}
+
+function getLocationKey(location) {
+  return [location.name, location.admin1, location.country_code].filter(Boolean).join("|").toLowerCase();
+}
+
 function formatDateline(time, timezone) {
   const date = new Date(time);
   const day = new Intl.DateTimeFormat("en-US", {
@@ -321,4 +393,29 @@ function round(value) {
 
 function setStatus(message) {
   elements.status.textContent = message;
+}
+
+function loadRecentCities() {
+  try {
+    return JSON.parse(localStorage.getItem("weatherNowRecentCities")) || [];
+  } catch {
+    return [];
+  }
+}
+
+function saveRecentCities() {
+  localStorage.setItem("weatherNowRecentCities", JSON.stringify(state.recentCities));
+}
+
+function escapeHtml(value) {
+  return String(value)
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
+
+function escapeAttribute(value) {
+  return escapeHtml(value);
 }
