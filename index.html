@@ -8,6 +8,23 @@
   </head>
   <body>
     <main class="app-shell">
+      <aside class="recent-sidebar" aria-label="Recently searched cities">
+        <a class="brand-mark" href="#" aria-label="WeatherNow home">
+          <span class="brand-icon" aria-hidden="true">☀</span>
+          <span>Weather<span>Now</span></span>
+        </a>
+
+        <button class="add-location-button" id="add-location-button" type="button">
+          <span aria-hidden="true">+</span>
+          Add Location
+        </button>
+
+        <section class="recent-section" aria-labelledby="recent-heading">
+          <h2 id="recent-heading">Recent Cities</h2>
+          <div class="recent-list" id="recent-list"></div>
+        </section>
+      </aside>
+
       <section class="weather-dashboard" aria-label="Weather dashboard">
         <form class="search-form" id="search-form">
           <label class="search-label" for="city-input">Search for a city</label>
