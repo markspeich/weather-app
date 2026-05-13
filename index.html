@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WeatherNow</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <section class="weather-dashboard" aria-label="Weather dashboard">
+        <form class="search-form" id="search-form">
+          <label class="search-label" for="city-input">Search for a city</label>
+          <span class="search-icon" aria-hidden="true">⌕</span>
+          <input
+            id="city-input"
+            class="search-input"
+            type="search"
+            name="city"
+            placeholder="Search for a city..."
+            autocomplete="off"
+          />
+          <button class="search-button" type="submit">Search</button>
+        </form>
+
+        <p class="status-message" id="status-message" role="status"></p>
+
+        <div class="content-grid">
+          <section class="hero-panel" aria-labelledby="city-name">
+            <div class="hero-copy">
+              <p class="dateline" id="dateline">Loading weather...</p>
+              <h1 id="city-name">Chicago</h1>
+              <div class="temperature-row">
+                <span class="current-temp" id="current-temp">--°F</span>
+                <span class="weather-art" id="weather-art" aria-hidden="true">⛅</span>
+              </div>
+              <h2 id="condition">Fetching forecast</h2>
+              <p class="feels-like" id="feels-like">Feels like --°</p>
+            </div>
+
+            <div class="skyline" aria-hidden="true">
+              <div class="cloud cloud-one"></div>
+              <div class="cloud cloud-two"></div>
+              <div class="sun-glow"></div>
+              <div class="city">
+                <span class="tower tower-1"></span>
+                <span class="tower tower-2"></span>
+                <span class="tower tower-3"></span>
+                <span class="tower tower-4"></span>
+                <span class="tower tower-5"></span>
+                <span class="tower tower-6"></span>
+                <span class="tower tower-7"></span>
+                <span class="tower tower-8"></span>
+                <span class="tower tower-9"></span>
+              </div>
+              <div class="shoreline"></div>
+            </div>
+
+            <section class="hourly-section" aria-labelledby="hourly-heading">
+              <h3 id="hourly-heading">Hourly</h3>
+              <div class="hourly-strip" id="hourly-strip"></div>
+            </section>
+          </section>
+
+          <aside class="details-panel" aria-label="Weather details and forecast">
+            <div class="metrics" id="metrics"></div>
+
+            <section class="daily-section" aria-labelledby="daily-heading">
+              <h3 id="daily-heading">5 Day</h3>
+              <div class="daily-list" id="daily-list"></div>
+            </section>
+          </aside>
+        </div>
+      </section>
+    </main>
+
+    <script src="app.js"></script>
+  </body>
+</html>
