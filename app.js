@@ -80,7 +80,7 @@ elements.recentList.addEventListener("click", (event) => {
 
 let weatherRequest = 0;
 renderRecentCities();
-loadWeatherForCity("Chicago");
+loadWeatherForCity(state.recentCities[0]?.name || "Chicago");
 
 async function loadWeatherForCity(city) {
   const request = ++weatherRequest;
@@ -308,11 +308,16 @@ function renderDaily(forecast) {
     .map((day, offset) => {
       const index = offset + 1;
       const condition = describeWeather(daily.weather_code[index]);
+      const rainChance = formatRainChance(daily.precipitation_probability_max?.[index]);
+      const rainLabel = rainChance === "—" ? "Precipitation chance unavailable" : `Maximum precipitation chance ${rainChance}`;
 
       return `
         <article class="daily-row">
           <span>${formatDay(day, forecast.timezone)}</span>
-          <span class="daily-icon" aria-hidden="true">${condition.icon}</span>
+          <span class="daily-outlook">
+            <span class="daily-icon" aria-hidden="true">${condition.icon}</span>
+            <span class="daily-rain" aria-label="${rainLabel}" title="${rainLabel}">${rainChance}</span>
+          </span>
           <span class="daily-high">${round(daily.temperature_2m_max[index])}${highUnit}</span>
           <span class="daily-low">${round(daily.temperature_2m_min[index])}${lowUnit}</span>
         </article>
@@ -324,6 +329,10 @@ function renderDaily(forecast) {
 function describeWeather(code) {
   const [label, icon] = weatherCodes[code] || ["Variable conditions", "🌤️"];
   return { label, icon };
+}
+
+function formatRainChance(value) {
+  return Number.isFinite(value) && value >= 0 && value <= 100 ? `${Math.round(value)}%` : "—";
 }
 
 function chooseDayNightIcon(icon, isDay) {
@@ -403,14 +412,23 @@ function setStatus(message) {
 
 function loadRecentCities() {
   try {
-    return JSON.parse(localStorage.getItem("weatherNowRecentCities")) || [];
+    const cities = JSON.parse(localStorage.getItem("weatherNowRecentCities"));
+    if (!Array.isArray(cities)) return [];
+    return cities.filter((city) => city &&
+      ["key", "name", "region", "temperature", "icon"].every((field) => typeof city[field] === "string") &&
+      city.name.trim() && city.key.trim()
+    ).slice(0, 6);
   } catch {
     return [];
   }
 }
 
 function saveRecentCities() {
-  localStorage.setItem("weatherNowRecentCities", JSON.stringify(state.recentCities));
+  try {
+    localStorage.setItem("weatherNowRecentCities", JSON.stringify(state.recentCities));
+  } catch {
+    // Forecast and radar remain usable when browser storage is unavailable.
+  }
 }
 
 function escapeHtml(value) {

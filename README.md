@@ -18,5 +18,10 @@ city's timezone. Blank areas can mean no precipitation or missing coverage.
 Refresh reuses the manifest for up to five minutes. No forecast radar is shown.
 Third-party services can be unavailable independently of Open-Meteo.
 
-Run radar regression checks with Node.js: `node --test tests/radar.test.cjs`.
+Run regression checks with Node.js: `node --test tests/*.test.cjs`.
 For map verification, serve over HTTP; OSM expects a browser Referer header.
+
+The app reopens the last successfully selected city using the existing recent-city
+storage. Missing or invalid storage falls back to Chicago. Daily rain percentages
+use Open-Meteo's maximum daily precipitation probability (not rainfall amount),
+including other precipitation types. Unavailable probabilities display a dash.
