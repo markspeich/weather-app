@@ -41,6 +41,7 @@ input {
 .recent-sidebar {
   display: flex;
   flex-direction: column;
+  min-width: 0;
   min-height: calc(100vh - 4rem);
   padding: 2rem 1.45rem;
   color: #fff;
