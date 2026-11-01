@@ -78,21 +78,26 @@ elements.recentList.addEventListener("click", (event) => {
   }
 });
 
+let weatherRequest = 0;
 renderRecentCities();
 loadWeatherForCity("Chicago");
 
 async function loadWeatherForCity(city) {
+  const request = ++weatherRequest;
   setStatus(`Looking up ${city}...`);
 
   try {
     const location = await findLocation(city);
+    if (request !== weatherRequest) return;
     setStatus(`Loading ${location.name} weather...`);
     const forecast = await fetchForecast(location);
+    if (request !== weatherRequest) return;
 
     renderWeather(location, forecast);
     elements.input.value = "";
     setStatus("");
   } catch (error) {
+    if (request !== weatherRequest) return;
     setStatus(error.message || "Something went wrong while loading weather.");
   }
 }
@@ -200,6 +205,7 @@ function renderWeather(location, forecast) {
   renderHourly(forecast);
   renderDaily(forecast);
   rememberCity(city);
+  if (window.WeatherRadar) window.WeatherRadar.show(location, forecast.timezone);
 }
 
 function rememberCity(city) {

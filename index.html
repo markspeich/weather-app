@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>WeatherNow</title>
     <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   </head>
   <body>
     <main class="app-shell">
@@ -88,9 +89,30 @@
             </section>
           </aside>
         </div>
+        <section class="radar-panel" aria-labelledby="radar-heading">
+          <div class="radar-heading-row">
+            <div><p class="radar-eyebrow">PRECIPITATION · PAST 2 HOURS</p><h3 id="radar-heading">Weather radar</h3></div>
+            <button id="radar-refresh" class="radar-secondary" type="button">Refresh</button>
+          </div>
+          <p id="radar-place" class="radar-place">Waiting for your city</p>
+          <div id="radar-map" class="radar-map" role="region" aria-label="Precipitation radar map"></div>
+          <div class="radar-controls">
+            <button id="radar-play" class="radar-play" type="button" disabled aria-pressed="false">▶ Play</button>
+            <div class="radar-timeline">
+              <label for="radar-time">Radar time <output id="radar-timestamp" for="radar-time">—</output></label>
+              <input id="radar-time" type="range" min="0" max="0" value="0" disabled />
+              <div class="radar-endpoints"><span id="radar-start">Earlier</span><span id="radar-end">Latest</span></div>
+            </div>
+          </div>
+          <div class="radar-footer"><span class="radar-legend">Light <span aria-hidden="true"></span> Heavy</span><span>Weather data by <a href="https://www.rainviewer.com/">RainViewer</a></span></div>
+          <p id="radar-status" class="radar-status" role="status">Loading radar…</p>
+          <p class="radar-note">Past observations, not a forecast. Blank areas may have no precipitation or no radar coverage.</p>
+        </section>
       </section>
     </main>
 
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="radar.js"></script>
     <script src="app.js"></script>
   </body>
 </html>

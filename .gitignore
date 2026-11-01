@@ -1,1 +1,3 @@
 weather-design-concepts/
+.playwright-cli/
+output/playwright/

@@ -768,3 +768,42 @@ h3 {
     grid-template-columns: minmax(6rem, 1fr) 2.8rem 3.2rem 3.2rem;
   }
 }
+
+.radar-panel {
+  margin-top: 2.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--line);
+}
+.radar-heading-row, .radar-controls, .radar-footer, .radar-endpoints {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+.radar-eyebrow { margin: 0 0 .5rem; color: var(--muted); font-size: .7rem; font-weight: 750; letter-spacing: .08em; }
+.radar-heading-row h3 { margin: 0; }
+.radar-place { margin: .6rem 0 1rem; color: var(--muted); font-size: .9rem; }
+.radar-map { width: 100%; max-width: 900px; height: 340px; border: 1px solid var(--line); border-radius: 8px; z-index: 0; background: #e2ecf2; }
+.radar-play, .radar-secondary { min-height: 44px; border: 1px solid var(--line); border-radius: 8px; padding: .5rem 1rem; cursor: pointer; }
+.radar-play { min-width: 100px; background: #237ed2; color: white; border-color: #237ed2; }
+.radar-secondary { background: var(--panel); color: var(--ink); }
+.radar-controls { margin-top: 1rem; max-width: 900px; }
+.radar-timeline { flex: 1; min-width: 0; }
+.radar-timeline label { display: flex; justify-content: space-between; gap: .5rem; color: var(--muted); font-size: .8rem; }
+.radar-timeline output { color: var(--ink); font-weight: 650; }
+.radar-timeline input { display: block; width: 100%; margin: 0; min-height: 36px; accent-color: #237ed2; cursor: pointer; }
+.radar-endpoints { color: var(--muted); font-size: .7rem; }
+.radar-footer { flex-wrap: wrap; max-width: 900px; margin-top: 1.1rem; font-size: .75rem; color: var(--muted); }
+.radar-footer a { color: #1769ac; }
+.radar-legend { display: inline-flex; gap: .5rem; align-items: center; }
+.radar-legend span { width: 90px; height: 7px; border-radius: 4px; background: linear-gradient(90deg, #88ddf0, #009cf8, #2466a0, #ffe04a, #ff5345); }
+.radar-status { margin: .9rem 0 .4rem; font-size: .8rem; color: var(--muted); min-height: 1.2em; }
+.radar-note { margin: 0; color: var(--muted); font-size: .75rem; line-height: 1.5; max-width: 900px; }
+.radar-panel button:focus-visible, .radar-panel input:focus-visible { outline: 3px solid #1769ac; outline-offset: 3px; }
+.radar-panel button:disabled { opacity: .5; cursor: default; }
+@media (max-width: 480px) {
+  .radar-map { height: 290px; }
+  .radar-controls { gap: .7rem; }
+  .radar-play { min-width: 80px; padding: .5rem; }
+  .radar-timeline label { font-size: .7rem; }
+}
