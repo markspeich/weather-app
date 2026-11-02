@@ -1,4 +1,4 @@
-# WeatherNow
+# Mark’s Forecast
 
 A clean weather dashboard inspired by the first design concept in this project.
 

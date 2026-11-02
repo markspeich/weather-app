@@ -8,7 +8,7 @@
 
 ## Product Direction
 
-- WeatherNow is a weather dashboard inspired by `weather-design-concepts/concept-1-clean-desktop-dashboard.png`.
+- Mark’s Forecast is a weather dashboard inspired by `weather-design-concepts/concept-1-clean-desktop-dashboard.png`.
 - Keep the Concept 1 feel where practical: blue left sidebar, airy pale weather panel, large current city and temperature, and a right-side details/forecast column on desktop widths.
 - The first screen should be the usable dashboard, not a landing page.
 
